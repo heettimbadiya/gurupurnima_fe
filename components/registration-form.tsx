@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,292 +12,322 @@ import axios from "axios"
 import { toast } from 'react-hot-toast';
 
 interface RegistrationFormProps {
-  onSubmit: (data: {
-    firstName: string
-    middleName?: string
-    lastName: string
-    whatsappNumber: string
-    center: string
-    age: number
-    teachersFeeTaken: string
-    willTeachersFeeBeTaken: string
-    photo: string | null
-  }) => void
+    onSubmit: (data: {
+        firstName: string
+        middleName?: string
+        lastName: string
+        whatsappNumber: string
+        center: string
+        age: number
+        teachersFeeTaken: string
+        willTeachersFeeBeTaken: string
+        photo: string | null
+    }) => void
 }
 
+const centers = [
+    "સૌરાષ્ટ્ર કેન્દ્ર",
+    "સોહમ કેન્દ્ર",
+    "સુમન સૂરજ કેન્દ્ર",
+    "સુમન બાલ સંસ્કાર ધ્યાન કેન્દ્ર",
+    "સોહમ બાલ કેન્દ્ર",
+    "સાધના બાલ કેન્દ્ર",
+    "રાજનંદની કેન્દ્ર",
+    "શુભ સામુહિક ધ્યાન કેન્દ્ર",
+    "વેદાંત સામુહિક ધ્યાન કેન્દ્ર",
+    "યોગીરાજ કેન્દ્ર",
+    "હરેકૃષ્ણ કેન્દ્ર",
+    "સૂર્યકિરણ કેન્દ્ર",
+    "સુવિધા કેન્દ્ર",
+    "વ્રજવિલા કેન્દ્ર",
+    "શુભમ કેન્દ્ર",
+    "જય યોગેશ્વર કેન્દ્ર",
+    "જીવનદીપ કેન્દ્ર",
+    "તક્ષશિલા કેન્દ્ર",
+    "સમર્પણ બાલ કેન્દ્ર",
+    "વ્રજવિલા બાલ કેન્દ્ર",
+    "નીલકમળ કેન્દ્ર",
+    "જય સરદાર કેન્દ્ર",
+    "યમુનાકુંજ કેન્દ્ર",
+    "પ્રેરણા કેન્દ્ર",
+    "મહાવીર કેન્દ્ર",
+    "સુમન સંગિની કેન્દ્ર",
+    "વિશ્વનગર સ્થાઈ કેન્દ્ર",
+    "રચના બાલ કેન્દ્ર",
+    "બાલ વિકાસ કેન્દ્ર",
+    "સુંદરબાગ કેન્દ્ર",
+    "સાધના સામુહિક ધ્યાન કેન્દ્ર",
+    "ગુરુનગર કેન્દ્ર",
+    "કેયૂર કેન્દ્ર"
+]
+
 export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
-  const [firstName, setFirstName] = useState("")
-  const [middleName, setMiddleName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [whatsappNumber, setWhatsappNumber] = useState("")
-  const [center, setCenter] = useState("")
-  const [age, setAge] = useState("")
-  const [teachersFeeTaken, setTeachersFeeTaken] = useState("")
-  const [willTeachersFeeBeTaken, setWillTeachersFeeBeTaken] = useState("")
-  const [photo, setPhoto] = useState<any>(null)
-  const [photoFile, setPhotoFile] = useState<any>(null)
-  const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState({
-    firstName: false,
-    lastName: false,
-    whatsappNumber: false,
-    center: false,
-    age: false,
-    teachersFeeTaken: false,
-    willTeachersFeeBeTaken: false,
-    photo: false,
-  })
+    const [firstName, setFirstName] = useState("")
+    const [middleName, setMiddleName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [whatsappNumber, setWhatsappNumber] = useState("")
+    const [center, setCenter] = useState("")
+    const [age, setAge] = useState("")
+    const [teachersFeeTaken, setTeachersFeeTaken] = useState("")
+    const [willTeachersFeeBeTaken, setWillTeachersFeeBeTaken] = useState("")
+    const [photo, setPhoto] = useState<any>(null)
+    const [photoFile, setPhotoFile] = useState<any>(null)
+    const [loading, setLoading] = useState(false)
+    const [errors, setErrors] = useState({
+        firstName: false,
+        lastName: false,
+        whatsappNumber: false,
+        center: false,
+        age: false,
+        teachersFeeTaken: false,
+        willTeachersFeeBeTaken: false,
+        photo: false,
+    })
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    setPhotoFile(file)
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        setPhoto(event.target?.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-
-    const newErrors = {
-      firstName: !firstName,
-      lastName: !lastName,
-      whatsappNumber: !whatsappNumber,
-      center: !center,
-      age: !age || isNaN(Number(age)) || Number(age) <= 0,
-      teachersFeeTaken: !teachersFeeTaken,
-      willTeachersFeeBeTaken: !willTeachersFeeBeTaken,
-      photo: !photo,
-    }
-
-    setErrors(newErrors)
-
-    const hasErrors = Object.values(newErrors).some(error => error)
-
-    if (!hasErrors) {
-      const formData = {
-        firstName,
-        middleName: middleName || undefined,
-        lastName,
-        whatsappNumber,
-        center,
-        age: Number(age),
-        teachersFeeTaken,
-        willTeachersFeeBeTaken,
-        photo,
-      }
-
-      try {
-        const formPayload = new FormData()
-        formPayload.append("firstName", firstName)
-        if (middleName) formPayload.append("middleName", middleName)
-        formPayload.append("lastName", lastName)
-        formPayload.append("whatsappNumber", whatsappNumber)
-        formPayload.append("center", center)
-        formPayload.append("age", String(age))
-        formPayload.append("teachersFeeTaken", teachersFeeTaken)
-        formPayload.append("willTeachersFeeBeTaken", willTeachersFeeBeTaken)
-
-        if (photoFile instanceof File || photoFile instanceof Blob) {
-          formPayload.append("photo", photoFile)
-        } else {
-          console.warn("Photo is not a valid file.")
-        }
-
-        const res = await axios.post(
-            "https://gurupurnima-be.onrender.com/api/students",
-            formPayload,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        setPhotoFile(file)
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = (event) => {
+                setPhoto(event.target?.result as string)
             }
-        )
-
-        if (res.data && res.status == 201) {
-          onSubmit(res.data)
-          toast.success(
-           "User registration successfully"
-          )
-        }else {
-          toast.error(
-              "Something want wrong!"
-          )
+            reader.readAsDataURL(file)
         }
-      } catch (error) {
-        console.error("Error submitting form:", error)
-      }
     }
-    setLoading(false)
-  }
 
-  return (
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="firstName">First Name *</Label>
-            <Input
-                id="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="Enter first name"
-                className={errors.firstName ? "border-red-500" : ""}
-            />
-            {errors.firstName && <p className="text-red-500 text-sm">First name is required</p>}
-          </div>
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setLoading(true)
 
-          <div className="space-y-2">
-            <Label htmlFor="middleName">Middle Name</Label>
-            <Input
-                id="middleName"
-                value={middleName}
-                onChange={(e) => setMiddleName(e.target.value)}
-                placeholder="Enter middle name (optional)"
-            />
-          </div>
+        const newErrors = {
+            firstName: !firstName,
+            lastName: !lastName,
+            whatsappNumber: !whatsappNumber,
+            center: !center,
+            age: !age || isNaN(Number(age)) || Number(age) <= 0,
+            teachersFeeTaken: !teachersFeeTaken,
+            willTeachersFeeBeTaken: !willTeachersFeeBeTaken,
+            photo: !photo,
+        }
 
-          <div className="space-y-2">
-            <Label htmlFor="lastName">Last Name *</Label>
-            <Input
-                id="lastName"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Enter last name"
-                className={errors.lastName ? "border-red-500" : ""}
-            />
-            {errors.lastName && <p className="text-red-500 text-sm">Last name is required</p>}
-          </div>
+        setErrors(newErrors)
 
-          <div className="space-y-2">
-            <Label htmlFor="whatsappNumber">WhatsApp Number *</Label>
-            <Input
-                id="whatsappNumber"
-                value={whatsappNumber}
-                onChange={(e) => setWhatsappNumber(e.target.value)}
-                placeholder="Enter WhatsApp number"
-                className={errors.whatsappNumber ? "border-red-500" : ""}
-                type="tel"
-                maxLength={10}
-            />
-            {errors.whatsappNumber && <p className="text-red-500 text-sm">WhatsApp number is required</p>}
-          </div>
+        const hasErrors = Object.values(newErrors).some(error => error)
 
-          <div className="space-y-2">
-            <Label htmlFor="center">Center *</Label>
-            <Input
-                id="center"
-                value={center}
-                onChange={(e) => setCenter(e.target.value)}
-                placeholder="Enter center name"
-                className={errors.center ? "border-red-500" : ""}
-            />
-            {errors.center && <p className="text-red-500 text-sm">Center is required</p>}
-          </div>
+        if (!hasErrors) {
 
-          <div className="space-y-2">
-            <Label htmlFor="age">Age *</Label>
-            <Input
-                id="age"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                placeholder="Enter age"
-                className={errors.age ? "border-red-500" : ""}
-                type="number"
-                min="1"
-                max="120"
-            />
-            {errors.age && <p className="text-red-500 text-sm">Valid age is required</p>}
-          </div>
-        </div>
+            try {
+                const formPayload = new FormData()
+                formPayload.append("firstName", firstName)
+                if (middleName) formPayload.append("middleName", middleName)
+                formPayload.append("lastName", lastName)
+                formPayload.append("whatsappNumber", whatsappNumber)
+                formPayload.append("center", center)
+                formPayload.append("age", String(age))
+                formPayload.append("teachersFeeTaken", teachersFeeTaken)
+                formPayload.append("willTeachersFeeBeTaken", willTeachersFeeBeTaken)
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="teachersFeeTaken">Teachers Fee Taken *</Label>
-            <Select value={teachersFeeTaken} onValueChange={setTeachersFeeTaken}>
-              <SelectTrigger className={errors.teachersFeeTaken ? "border-red-500" : ""}>
-                <SelectValue placeholder="Select option" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Yes">Yes</SelectItem>
-                <SelectItem value="No">No</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors.teachersFeeTaken && <p className="text-red-500 text-sm">Please select an option</p>}
-          </div>
+                if (photoFile instanceof File || photoFile instanceof Blob) {
+                    formPayload.append("photo", photoFile)
+                } else {
+                    console.warn("Photo is not a valid file.")
+                }
 
-          <div className="space-y-2">
-            <Label htmlFor="willTeachersFeeBeTaken">Will Teachers Fee Be Taken *</Label>
-            <Select value={willTeachersFeeBeTaken} onValueChange={setWillTeachersFeeBeTaken}>
-              <SelectTrigger className={errors.willTeachersFeeBeTaken ? "border-red-500" : ""}>
-                <SelectValue placeholder="Select option" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Yes">Yes</SelectItem>
-                <SelectItem value="No">No</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors.willTeachersFeeBeTaken && <p className="text-red-500 text-sm">Please select an option</p>}
-          </div>
-        </div>
+                const res = await axios.post(
+                    "https://gurupurnima-be.onrender.com/api/students",
+                    formPayload,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                )
 
-        <div className="space-y-2">
-          <Label htmlFor="photo">Photo *</Label>
-          <Card className={`border-2 border-dashed ${errors.photo ? "border-red-500" : "border-gray-300"} rounded-lg`}>
-            <CardContent className="flex flex-col items-center justify-center p-6">
-              {photo ? (
-                  <div className="relative w-40 h-40 mb-4">
-                    <img
-                        src={photo || "/placeholder.svg"}
-                        alt="Preview"
-                        className="w-full h-full object-cover rounded-full"
+                if (res.data && res.status == 201) {
+                    onSubmit(res.data)
+                    toast.success(
+                        "User registration successfully"
+                    )
+                }else {
+                    toast.error(
+                        "Something want wrong!"
+                    )
+                }
+            } catch (error) {
+                console.error("Error submitting form:", error)
+            }
+        }
+        setLoading(false)
+    }
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="firstName">અટક *</Label>
+                    <Input
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="અટક દાખલ કરો"
+                        className={errors.firstName ? "border-red-500" : ""}
                     />
-                    <Button
-                        type="button"
-                        variant="destructive"
-                        size="sm"
-                        className="absolute -top-2 -right-2 rounded-full w-8 h-8 p-0"
-                        onClick={() => setPhoto(null)}
-                    >
-                      ×
-                    </Button>
-                  </div>
-              ) : (
-                  <div className="w-40 h-40 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                    <Camera className="h-12 w-12 text-gray-400" />
-                  </div>
-              )}
+                    {errors.firstName && <p className="text-red-500 text-sm">અટક ભરવી જરૂરી છે</p>}
+                </div>
 
-              <div className="flex items-center justify-center">
-                <label htmlFor="photo-upload" className="cursor-pointer">
-                  <div className="flex items-center justify-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-100">
-                    <Upload className="h-4 w-4" />
-                    <span>{photo ? "Change Photo" : "Upload Photo"}</span>
-                  </div>
-                  <input
-                      id="photo-upload"
-                      type="file"
-                      accept="image/*"
-                      onChange={handlePhotoChange}
-                      className="hidden"
-                  />
-                </label>
-              </div>
-              {errors.photo && <p className="text-red-500 text-sm mt-2">Photo is required</p>}
-              <p className="text-xs text-gray-500 mt-2 text-center">
-                Photo will be displayed in a circular frame on the card
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+                <div className="space-y-2">
+                    <Label htmlFor="middleName">
+                        પોતાનુ નામ</Label>
+                    <Input
+                        id="middleName"
+                        value={middleName}
+                        onChange={(e) => setMiddleName(e.target.value)}
+                        placeholder="પોતાનુ નામ દાખલ કરો (વૈકલ્પિક)"
+                    />
+                </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Submitting..." : "Generate Registration Card"}
-        </Button>
-      </form>
-  )
+                <div className="space-y-2">
+                    <Label htmlFor="lastName">
+                        પીતાનુ નામ *</Label>
+                    <Input
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="પીતાનુ નામ દાખલ કરો"
+                        className={errors.lastName ? "border-red-500" : ""}
+                    />
+                    {errors.lastName && <p className="text-red-500 text-sm">પીતાનુ નામ ભરવું જરૂરી છે</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="whatsappNumber">વોટ્સએપ નંબર *</Label>
+                    <Input
+                        id="whatsappNumber"
+                        value={whatsappNumber}
+                        onChange={(e) => setWhatsappNumber(e.target.value)}
+                        placeholder="વોટ્સએપ નંબર દાખલ કરો"
+                        className={errors.whatsappNumber ? "border-red-500" : ""}
+                        type="tel"
+                        maxLength={10}
+                    />
+                    {errors.whatsappNumber && <p className="text-red-500 text-sm">વોટ્સએપ નંબર ભરવો જરૂરી છે</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="center">કેન્દ્ર *</Label>
+                    <Select value={center} onValueChange={setCenter}>
+                        <SelectTrigger className={errors.center ? "border-red-500" : ""}>
+                            <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {centers.map((item: string) => (
+                                <SelectItem key={item} value={item}>{item}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {errors.center && <p className="text-red-500 text-sm">કેન્દ્ર પસંદ કરવું જરૂરી છે</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="age">ઉંમર *</Label>
+                    <Input
+                        id="age"
+                        value={age}
+                        onChange={(e) => setAge(e.target.value)}
+                        placeholder="ઉંમર દાખલ કરો"
+                        className={errors.age ? "border-red-500" : ""}
+                        type="number"
+                        min="1"
+                        max="120"
+                    />
+                    {errors.age && <p className="text-red-500 text-sm">માન્ય ઉંમર ભરવી જરૂરી છે</p>}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="teachersFeeTaken">શિક્ષક ફી લીધેલ છે? *</Label>
+                    <Select value={teachersFeeTaken} onValueChange={setTeachersFeeTaken}>
+                        <SelectTrigger className={errors.teachersFeeTaken ? "border-red-500" : ""}>
+                            <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Yes">હા</SelectItem>
+                            <SelectItem value="No">ના</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    {errors.teachersFeeTaken && <p className="text-red-500 text-sm">કૃપા કરીને એક વિકલ્પ પસંદ કરો</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="willTeachersFeeBeTaken">શિક્ષક ફી લેવામાં આવશે? *</Label>
+                    <Select value={willTeachersFeeBeTaken} onValueChange={setWillTeachersFeeBeTaken}>
+                        <SelectTrigger className={errors.willTeachersFeeBeTaken ? "border-red-500" : ""}>
+                            <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Yes">હા</SelectItem>
+                            <SelectItem value="No">ના</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    {errors.willTeachersFeeBeTaken && <p className="text-red-500 text-sm">કૃપા કરીને એક વિકલ્પ પસંદ કરો</p>}
+                </div>
+            </div>
+
+            <div className="space-y-2">
+                <Label htmlFor="photo">ફોટો *</Label>
+                <Card className={`border-2 border-dashed ${errors.photo ? "border-red-500" : "border-gray-300"} rounded-lg`}>
+                    <CardContent className="flex flex-col items-center justify-center p-6">
+                        {photo ? (
+                            <div className="relative w-40 h-40 mb-4">
+                                <img
+                                    src={photo || "/placeholder.svg"}
+                                    alt="Preview"
+                                    className="w-full h-full object-cover rounded-full"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    size="sm"
+                                    className="absolute -top-2 -right-2 rounded-full w-8 h-8 p-0"
+                                    onClick={() => setPhoto(null)}
+                                >
+                                    ×
+                                </Button>
+                            </div>
+                        ) : (
+                            <div className="w-40 h-40 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                <Camera className="h-12 w-12 text-gray-400" />
+                            </div>
+                        )}
+
+                        <div className="flex items-center justify-center">
+                            <label htmlFor="photo-upload" className="cursor-pointer">
+                                <div className="flex items-center justify-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-100">
+                                    <Upload className="h-4 w-4" />
+                                    <span>{photo ? "ફોટો બદલો" : "ફોટો અપલોડ કરો"}</span>
+                                </div>
+                                <input
+                                    id="photo-upload"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handlePhotoChange}
+                                    className="hidden"
+                                />
+                            </label>
+                        </div>
+                        {errors.photo && <p className="text-red-500 text-sm mt-2">ફોટો જરૂરી છે</p>}
+                        <p className="text-xs text-gray-500 mt-2 text-center">
+                            ફોટો કાર્ડ પર ગોળ ફ્રેમમાં પ્રદર્શિત થશે
+                        </p>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "સબમિટ કરી રહ્યું છે..." : "રજિસ્ટ્રેશન કાર્ડ જનરેટ કરો"}
+            </Button>
+        </form>
+    )
 }
