@@ -76,7 +76,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
       photo: !photo,
     }
 
-    setErrors(newErrors)
+    setErrors(newErrors);
 
     const hasErrors = Object.values(newErrors).some(error => error)
 
@@ -91,15 +91,41 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         age: Number(age),
         teachersFeeTaken,
         willTeachersFeeBeTaken,
-        photo,
-      }
+        photo, // Make sure this is a File/Blob if it's an image
+      };
 
-      onSubmit(formData)
+      onSubmit(formData);
 
       try {
-        await axios.post('https://gurupurnima-be.onrender.com/api/students', formData)
+        const formPayload = new FormData();
+        formPayload.append("registerNumber", registerNumber);
+        formPayload.append("firstName", firstName);
+        if (middleName) formPayload.append("middleName", middleName);
+        formPayload.append("lastName", lastName);
+        formPayload.append("whatsappNumber", whatsappNumber);
+        formPayload.append("center", center);
+        formPayload.append("age", String(age));
+        formPayload.append("teachersFeeTaken", teachersFeeTaken);
+        formPayload.append("willTeachersFeeBeTaken", willTeachersFeeBeTaken);
+
+        // Append photo if it exists and is a File
+        if (photo instanceof File || photo instanceof Blob) {
+          formPayload.append("photo", photo);
+        } else {
+          console.warn("Photo is not a valid file.");
+        }
+
+        await axios.post(
+            "https://gurupurnima-be.onrender.com/api/students",
+            formPayload,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+        );
       } catch (error) {
-        console.error('Error submitting form:', error)
+        console.error("Error submitting form:", error);
       }
     }
   }

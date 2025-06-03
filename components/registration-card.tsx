@@ -32,6 +32,7 @@ export default function RegistrationCard({ name, regNumber, photo }: Registratio
         onclone: (clonedDoc: any) => {
           const clonedElement: any = clonedDoc.querySelector('[data-card-ref]') as HTMLElement
           if (clonedElement) {
+            const screenWidth = clonedDoc.defaultView?.innerWidth || 0;
             const regElement = clonedElement.querySelector('#pos')
             if (regElement) {
               regElement.style.position = 'absolute'
@@ -43,6 +44,11 @@ export default function RegistrationCard({ name, regNumber, photo }: Registratio
               regElement.style.alignItems = 'center'
               regElement.style.justifyContent = 'center'
               regElement.style.textAlign = 'center'
+
+                if (screenWidth < 450) {
+                  regElement.style.top = '11.5%'
+                  regElement.style.left = '5.5%'
+                }
 
               // Target the inner text div
               const innerText = regElement.querySelector('.reg-number-text')
@@ -84,10 +90,8 @@ export default function RegistrationCard({ name, regNumber, photo }: Registratio
           <div className="absolute inset-0">
             <div
                 id="pos"
-                className="absolute flex justify-center"
+                className="absolute flex justify-center top-[17.5%] left-[5.5%] md:left-[6.5%]"
                 style={{
-                  top: '16.5%',
-                  left: '6%',
                   width: '64px',
                   height: '64px',
                   textAlign: 'center'
@@ -106,7 +110,7 @@ export default function RegistrationCard({ name, regNumber, photo }: Registratio
             </div>
 
             <div className="absolute top-[35%] left-[50%] transform -translate-x-1/2">
-              <div className="w-[170px] h-[170px] md:w-[210px] md:h-[210px] rounded-full overflow-hidden">
+              <div className="w-[165px] h-[165px] sm:w-[210px] sm:h-[210px] rounded-full overflow-hidden">
                 <img
                     src={photo || "/placeholder.svg?height=160&width=160"}
                     alt={name}
@@ -117,7 +121,7 @@ export default function RegistrationCard({ name, regNumber, photo }: Registratio
               </div>
             </div>
 
-            <div className="absolute top-[63.5%] left-1/2 transform -translate-x-1/2 text-center w-full px-6">
+            <div className="absolute top-[63%] sm:top-[63.5%] left-1/2 transform -translate-x-1/2 text-center w-full px-6">
               <div className="text-red-800 font-bold text-md md:text-lg uppercase tracking-wide leading-tight text-center">
                 {name}
               </div>
