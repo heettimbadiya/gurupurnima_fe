@@ -10,10 +10,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Camera, Upload } from "lucide-react"
 import axios from "axios"
+import { toast } from 'react-hot-toast';
 
 interface RegistrationFormProps {
   onSubmit: (data: {
-    registerNumber: string
     firstName: string
     middleName?: string
     lastName: string
@@ -27,7 +27,6 @@ interface RegistrationFormProps {
 }
 
 export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
-  const [registerNumber, setRegisterNumber] = useState("")
   const [firstName, setFirstName] = useState("")
   const [middleName, setMiddleName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -36,9 +35,10 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
   const [age, setAge] = useState("")
   const [teachersFeeTaken, setTeachersFeeTaken] = useState("")
   const [willTeachersFeeBeTaken, setWillTeachersFeeBeTaken] = useState("")
-  const [photo, setPhoto] = useState<string | null>(null)
+  const [photo, setPhoto] = useState<any>(null)
+  const [photoFile, setPhotoFile] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({
-    registerNumber: false,
     firstName: false,
     lastName: false,
     whatsappNumber: false,
@@ -51,6 +51,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
+    setPhotoFile(file)
     if (file) {
       const reader = new FileReader()
       reader.onload = (event) => {
@@ -62,10 +63,9 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
 
-    // Validation
     const newErrors = {
-      registerNumber: !registerNumber,
       firstName: !firstName,
       lastName: !lastName,
       whatsappNumber: !whatsappNumber,
@@ -76,13 +76,12 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
       photo: !photo,
     }
 
-    setErrors(newErrors);
+    setErrors(newErrors)
 
     const hasErrors = Object.values(newErrors).some(error => error)
 
     if (!hasErrors) {
       const formData = {
-        registerNumber,
         firstName,
         middleName: middleName || undefined,
         lastName,
@@ -91,31 +90,27 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         age: Number(age),
         teachersFeeTaken,
         willTeachersFeeBeTaken,
-        photo, // Make sure this is a File/Blob if it's an image
-      };
-
-      onSubmit(formData);
+        photo,
+      }
 
       try {
-        const formPayload = new FormData();
-        formPayload.append("registerNumber", registerNumber);
-        formPayload.append("firstName", firstName);
-        if (middleName) formPayload.append("middleName", middleName);
-        formPayload.append("lastName", lastName);
-        formPayload.append("whatsappNumber", whatsappNumber);
-        formPayload.append("center", center);
-        formPayload.append("age", String(age));
-        formPayload.append("teachersFeeTaken", teachersFeeTaken);
-        formPayload.append("willTeachersFeeBeTaken", willTeachersFeeBeTaken);
+        const formPayload = new FormData()
+        formPayload.append("firstName", firstName)
+        if (middleName) formPayload.append("middleName", middleName)
+        formPayload.append("lastName", lastName)
+        formPayload.append("whatsappNumber", whatsappNumber)
+        formPayload.append("center", center)
+        formPayload.append("age", String(age))
+        formPayload.append("teachersFeeTaken", teachersFeeTaken)
+        formPayload.append("willTeachersFeeBeTaken", willTeachersFeeBeTaken)
 
-        // Append photo if it exists and is a File
-        if (photo instanceof File || photo instanceof Blob) {
-          formPayload.append("photo", photo);
+        if (photoFile instanceof File || photoFile instanceof Blob) {
+          formPayload.append("photo", photoFile)
         } else {
-          console.warn("Photo is not a valid file.");
+          console.warn("Photo is not a valid file.")
         }
 
-        await axios.post(
+        const res = await axios.post(
             "https://gurupurnima-be.onrender.com/api/students",
             formPayload,
             {
@@ -123,34 +118,27 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                 "Content-Type": "multipart/form-data",
               },
             }
-        );
+        )
+
+        if (res.data && res.status == 201) {
+          onSubmit(res.data)
+          toast.success(
+           "User registration successfully"
+          )
+        }else {
+          toast.error(
+              "Something want wrong!"
+          )
+        }
       } catch (error) {
-        console.error("Error submitting form:", error);
+        console.error("Error submitting form:", error)
       }
     }
+    setLoading(false)
   }
 
   return (
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="registerNumber">Registration Number *</Label>
-          <Input
-              id="registerNumber"
-              value={registerNumber}
-              onChange={(e) =>  {
-                const value = e.target.value
-                if (value.length <= 3) {
-                  setRegisterNumber(value)
-                }
-              }}
-              placeholder="Enter registration number"
-              className={errors.registerNumber ? "border-red-500" : ""}
-              maxLength={3}
-
-          />
-          {errors.registerNumber && <p className="text-red-500 text-sm">Registration number is required</p>}
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="firstName">First Name *</Label>
@@ -174,60 +162,59 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
             />
           </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name *</Label>
-          <Input
-              id="lastName"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              placeholder="Enter last name"
-              className={errors.lastName ? "border-red-500" : ""}
-          />
-          {errors.lastName && <p className="text-red-500 text-sm">Last name is required</p>}
-        </div>
+          <div className="space-y-2">
+            <Label htmlFor="lastName">Last Name *</Label>
+            <Input
+                id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Enter last name"
+                className={errors.lastName ? "border-red-500" : ""}
+            />
+            {errors.lastName && <p className="text-red-500 text-sm">Last name is required</p>}
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="whatsappNumber">WhatsApp Number *</Label>
-          <Input
-              id="whatsappNumber"
-              value={whatsappNumber}
-              onChange={(e) => setWhatsappNumber(e.target.value)}
-              placeholder="Enter WhatsApp number"
-              className={errors.whatsappNumber ? "border-red-500" : ""}
-              type="tel"
-              maxLength={10}
-          />
-          {errors.whatsappNumber && <p className="text-red-500 text-sm">WhatsApp number is required</p>}
-        </div>
+          <div className="space-y-2">
+            <Label htmlFor="whatsappNumber">WhatsApp Number *</Label>
+            <Input
+                id="whatsappNumber"
+                value={whatsappNumber}
+                onChange={(e) => setWhatsappNumber(e.target.value)}
+                placeholder="Enter WhatsApp number"
+                className={errors.whatsappNumber ? "border-red-500" : ""}
+                type="tel"
+                maxLength={10}
+            />
+            {errors.whatsappNumber && <p className="text-red-500 text-sm">WhatsApp number is required</p>}
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="center">Center *</Label>
-          <Input
-              id="center"
-              value={center}
-              onChange={(e) => setCenter(e.target.value)}
-              placeholder="Enter center name"
-              className={errors.center ? "border-red-500" : ""}
-          />
-          {errors.center && <p className="text-red-500 text-sm">Center is required</p>}
-        </div>
+          <div className="space-y-2">
+            <Label htmlFor="center">Center *</Label>
+            <Input
+                id="center"
+                value={center}
+                onChange={(e) => setCenter(e.target.value)}
+                placeholder="Enter center name"
+                className={errors.center ? "border-red-500" : ""}
+            />
+            {errors.center && <p className="text-red-500 text-sm">Center is required</p>}
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="age">Age *</Label>
-          <Input
-              id="age"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              placeholder="Enter age"
-              className={errors.age ? "border-red-500" : ""}
-              type="number"
-              min="1"
-              max="120"
-          />
-          {errors.age && <p className="text-red-500 text-sm">Valid age is required</p>}
+          <div className="space-y-2">
+            <Label htmlFor="age">Age *</Label>
+            <Input
+                id="age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                placeholder="Enter age"
+                className={errors.age ? "border-red-500" : ""}
+                type="number"
+                min="1"
+                max="120"
+            />
+            {errors.age && <p className="text-red-500 text-sm">Valid age is required</p>}
+          </div>
         </div>
-        </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -292,7 +279,13 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                     <Upload className="h-4 w-4" />
                     <span>{photo ? "Change Photo" : "Upload Photo"}</span>
                   </div>
-                  <input id="photo-upload" type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
+                  <input
+                      id="photo-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoChange}
+                      className="hidden"
+                  />
                 </label>
               </div>
               {errors.photo && <p className="text-red-500 text-sm mt-2">Photo is required</p>}
@@ -303,8 +296,8 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
           </Card>
         </div>
 
-        <Button type="submit" className="w-full">
-          Generate Registration Card
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "Submitting..." : "Generate Registration Card"}
         </Button>
       </form>
   )
