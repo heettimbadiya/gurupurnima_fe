@@ -30,7 +30,7 @@ export default function Home() {
       <main className="min-h-screen  bg-gray-100 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl md:text-3xl font-bold text-center mb-2">Registration Card Generator</h1>
-        <p className="text-center text-gray-600 mb-6">Create your personalized registration card with your details</p>
+        <p className="text-2xl md:text-3xl font-bold text-center mb-6 text-blue-600">Created by JBS Technology</p>
 
         <Tabs value={isCardGenerated} defaultValue={"form"} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-8">

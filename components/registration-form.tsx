@@ -172,6 +172,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
             <ul className="list-disc list-inside text-[12px] text-gray-700">
                 <li>૫ વર્ષ થી ઉપર ના બાળકો માટે રિજીટ્રેશન ફરજીયાત છે.</li>
                 <li>બધી માહિતી ઇંગ્લિશ માં ભરવી ફરજીયાત છે.</li>
+                <li>આ ફોર્મ માત્ર વરાછા ઝોન માટે જ છે.</li>
             </ul>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -263,7 +264,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="gender">લિંગ *</Label>
+                    <Label htmlFor="gender">ઝેન્ડર  *</Label>
                     <Select value={gender} onValueChange={setGender}>
                         <SelectTrigger className={errors.gender ? "border-red-500" : ""}>
                             <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
