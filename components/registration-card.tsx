@@ -85,7 +85,7 @@ export default function RegistrationCard({ name, regNumber, photo }: Registratio
             className="relative w-full max-w-md bg-white mx-auto"
             style={{ aspectRatio: "9/16" }}
         >
-          <img src="/card-template.png" alt="Card Template" className="w-full h-auto" crossOrigin="anonymous" />
+          <img src="/Instagram story - 2.png" alt="Card Template" className="w-full h-auto" crossOrigin="anonymous" />
 
           <div className="absolute inset-0">
             <div
@@ -121,8 +121,8 @@ export default function RegistrationCard({ name, regNumber, photo }: Registratio
               </div>
             </div>
 
-            <div className="absolute top-[63%] sm:top-[63.5%] left-1/2 transform -translate-x-1/2 text-center w-full px-6">
-              <div className="text-red-800 font-bold text-md md:text-lg uppercase tracking-wide leading-tight text-center">
+            <div className="absolute top-[63%] sm:top-[64.5%] left-[56%] transform -translate-x-1/2 text-start w-full px-6">
+              <div className="text-red-800 font-bold text-md md:text-md uppercase tracking-wide leading-tight text-nowrap">
                 {name}
               </div>
             </div>
