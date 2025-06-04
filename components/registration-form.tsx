@@ -247,7 +247,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="teachersFeeTaken">શિક્ષક ફી લીધેલ છે? *</Label>
+                    <Label htmlFor="teachersFeeTaken">ગુરુદીક્ષા લીધી છે? *</Label>
                     <Select value={teachersFeeTaken} onValueChange={setTeachersFeeTaken}>
                         <SelectTrigger className={errors.teachersFeeTaken ? "border-red-500" : ""}>
                             <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
@@ -261,7 +261,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="willTeachersFeeBeTaken">શિક્ષક ફી લેવામાં આવશે? *</Label>
+                    <Label htmlFor="willTeachersFeeBeTaken">ગુરુદિક્ષા લેવાની છે? *</Label>
                     <Select value={willTeachersFeeBeTaken} onValueChange={setWillTeachersFeeBeTaken}>
                         <SelectTrigger className={errors.willTeachersFeeBeTaken ? "border-red-500" : ""}>
                             <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
