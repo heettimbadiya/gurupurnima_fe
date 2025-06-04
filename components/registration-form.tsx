@@ -76,6 +76,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
     const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState({
         firstName: false,
+        middleName: false,
         lastName: false,
         gender: false,
         whatsappNumber: false,
@@ -103,6 +104,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
 
         const newErrors = {
             firstName: !firstName,
+            middleName: !middleName,
             lastName: !lastName,
             gender: !gender,
             whatsappNumber: !whatsappNumber,
@@ -188,13 +190,14 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
 
                 <div className="space-y-2">
                     <Label htmlFor="middleName">
-                        પોતાનુ નામ</Label>
+                        પોતાનુ નામ *</Label>
                     <Input
                         id="middleName"
                         value={middleName}
                         onChange={(e) => setMiddleName(handleGujaratiInput(e.target.value))}
                         placeholder="પોતાનુ નામ દાખલ કરો (વૈકલ્પિક)"
                     />
+                    {errors.middleName && <p className="text-red-500 text-sm">પોતાનુ નામ ભરવી જરૂરી છે</p>}
                 </div>
 
                 <div className="space-y-2">
