@@ -25,39 +25,40 @@ interface RegistrationFormProps {
 }
 
 const centers = [
+    "કસવાલા સેન્ટર",
+    "કેયૂર સેન્ટર",
+    "ગુરુનગર સેન્ટર",
+    "જય યોગેશ્વર સેન્ટર",
+    "જીવનદીપ સેન્ટર",
+    "જય સરદાર સેન્ટર",
+    "તક્ષશિલા સેન્ટર",
+    "નીલકમલ સેન્ટર",
+    "પ્રેરણા સેન્ટર",
+    "બાલ વિકાસ કેન્દ્ર",
+    "મહાવીર સેન્ટર",
+    "યોગીરાજ સેન્ટર",
+    "યમુનાકુંજ સેન્ટર",
+    "રાજનંદની કેન્દ્ર",
+    "રચના બાળ કેન્દ્ર",
+    "વ્રજવિલા સેન્ટર",
+    "વેદાંત સામુહિક ધ્યાન સેન્ટર",
+    "વ્રજવિલા બાળ કેન્દ્ર",
+    "વિશ્વનગર સ્થાઈ સેન્ટર",
+    "શુભ સામુહિક ધ્યાન સેન્ટર",
+    "શુભમ સેન્ટર",
     "સૌરાષ્ટ્ર સેન્ટર",
     "સોહમ સેન્ટર",
     "સુમન સૂરજ સેન્ટર",
     "સુમન બાળ સંસ્કાર ધ્યાન કેન્દ્ર",
     "સોહમ બાળ કેન્દ્ર",
     "સાધના બાળ કેન્દ્ર",
-    "રાજનંદની કેન્દ્ર",
-    "શુભ સામુહિક ધ્યાન સેન્ટર",
-    "વેદાંત સામુહિક ધ્યાન સેન્ટર",
-    "યોગીરાજ સેન્ટર",
-    "હરેકૃષ્ણ સેન્ટર",
     "સૂર્યકિરણ સેન્ટર",
     "સુવિધા સેન્ટર",
-    "વ્રજવિલા સેન્ટર",
-    "શુભમ સેન્ટર",
-    "જય યોગેશ્વર સેન્ટર",
-    "જીવનદીપ સેન્ટર",
-    "તક્ષશિલા સેન્ટર",
     "સમર્પણ બાળ કેન્દ્ર",
-    "વ્રજવિલા બાળ કેન્દ્ર",
-    "નીલકમલ સેન્ટર",
-    "જય સરદાર સેન્ટર",
-    "યમુનાકુંજ સેન્ટર",
-    "પ્રેરણા સેન્ટર",
-    "મહાવીર સેન્ટર",
     "સુમન સંગિની સેન્ટર",
-    "વિશ્વનગર સ્થાઈ સેન્ટર",
-    "રચના બાળ કેન્દ્ર",
-    "બાલ વિકાસ કેન્દ્ર",
     "સુંદરબાગ સેન્ટર",
     "સાધના સામુહિક ધ્યાન સેન્ટર",
-    "ગુરુનગર સેન્ટર",
-    "કેયૂર સેન્ટર"
+    "હરેકૃષ્ણ સેન્ટર",
 ]
 
 export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
@@ -198,12 +199,12 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
 
                 <div className="space-y-2">
                     <Label htmlFor="lastName">
-                        પિતાનું નામ *</Label>
+                        પિતા/પતિનું નામ *</Label>
                     <Input
                         id="lastName"
                         value={lastName}
                         onChange={(e) =>  setLastName(handleGujaratiInput(e.target.value))}
-                        placeholder="પિતાનું નામ દાખલ કરો"
+                        placeholder="પિતા/પતિનું નામ દાખલ કરો"
                         className={errors.lastName ? "border-red-500" : ""}
                     />
                     {errors.lastName && <p className="text-red-500 text-sm">પિતાનું નામ ભરવું જરૂરી છે</p>}
@@ -266,7 +267,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="gender">ઝેન્ડર  *</Label>
+                    <Label htmlFor="gender">જાતિ *</Label>
                     <Select value={gender} onValueChange={setGender}>
                         <SelectTrigger className={errors.gender ? "border-red-500" : ""}>
                             <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
