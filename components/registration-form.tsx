@@ -19,7 +19,6 @@ interface RegistrationFormProps {
         whatsappNumber: string
         center: string
         age: number
-        teachersFeeTaken: string
         willTeachersFeeBeTaken: string
         photo: string | null
     }) => void
@@ -81,7 +80,6 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         whatsappNumber: false,
         center: false,
         age: false,
-        teachersFeeTaken: false,
         willTeachersFeeBeTaken: false,
         photo: false,
     })
@@ -109,7 +107,6 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
             whatsappNumber: !whatsappNumber,
             center: !center,
             age: !age || isNaN(Number(age)) || Number(age) <= 0,
-            teachersFeeTaken: !teachersFeeTaken,
             willTeachersFeeBeTaken: !willTeachersFeeBeTaken,
             photo: !photo,
         }
@@ -127,8 +124,8 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                 formPayload.append("lastName", lastName)
                 formPayload.append("whatsappNumber", whatsappNumber)
                 formPayload.append("center", center)
+                formPayload.append("gender", gender)
                 formPayload.append("age", String(age))
-                formPayload.append("teachersFeeTaken", teachersFeeTaken)
                 formPayload.append("willTeachersFeeBeTaken", willTeachersFeeBeTaken)
 
                 if (photoFile instanceof File || photoFile instanceof Blob) {
@@ -217,7 +214,12 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                     <Input
                         id="whatsappNumber"
                         value={whatsappNumber}
-                        onChange={(e) => setWhatsappNumber(e.target.value)}
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (/^\d{0,10}$/.test(val)) {
+                                setWhatsappNumber(val);
+                            }
+                        }}
                         placeholder="વોટ્સએપ નંબર દાખલ કરો"
                         className={errors.whatsappNumber ? "border-red-500" : ""}
                         type="tel"
