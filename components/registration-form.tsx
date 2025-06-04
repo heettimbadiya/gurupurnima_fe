@@ -26,44 +26,45 @@ interface RegistrationFormProps {
 }
 
 const centers = [
-    "સૌરાષ્ટ્ર કેન્દ્ર",
-    "સોહમ કેન્દ્ર",
-    "સુમન સૂરજ કેન્દ્ર",
-    "સુમન બાલ સંસ્કાર ધ્યાન કેન્દ્ર",
-    "સોહમ બાલ કેન્દ્ર",
-    "સાધના બાલ કેન્દ્ર",
+    "સૌરાષ્ટ્ર સેન્ટર",
+    "સોહમ સેન્ટર",
+    "સુમન સૂરજ સેન્ટર",
+    "સુમન બાળ સંસ્કાર ધ્યાન કેન્દ્ર",
+    "સોહમ બાળ કેન્દ્ર",
+    "સાધના બાળ કેન્દ્ર",
     "રાજનંદની કેન્દ્ર",
-    "શુભ સામુહિક ધ્યાન કેન્દ્ર",
-    "વેદાંત સામુહિક ધ્યાન કેન્દ્ર",
-    "યોગીરાજ કેન્દ્ર",
-    "હરેકૃષ્ણ કેન્દ્ર",
-    "સૂર્યકિરણ કેન્દ્ર",
-    "સુવિધા કેન્દ્ર",
-    "વ્રજવિલા કેન્દ્ર",
-    "શુભમ કેન્દ્ર",
-    "જય યોગેશ્વર કેન્દ્ર",
-    "જીવનદીપ કેન્દ્ર",
-    "તક્ષશિલા કેન્દ્ર",
-    "સમર્પણ બાલ કેન્દ્ર",
-    "વ્રજવિલા બાલ કેન્દ્ર",
-    "નીલકમળ કેન્દ્ર",
-    "જય સરદાર કેન્દ્ર",
-    "યમુનાકુંજ કેન્દ્ર",
-    "પ્રેરણા કેન્દ્ર",
-    "મહાવીર કેન્દ્ર",
-    "સુમન સંગિની કેન્દ્ર",
-    "વિશ્વનગર સ્થાઈ કેન્દ્ર",
-    "રચના બાલ કેન્દ્ર",
+    "શુભ સામુહિક ધ્યાન સેન્ટર",
+    "વેદાંત સામુહિક ધ્યાન સેન્ટર",
+    "યોગીરાજ સેન્ટર",
+    "હરેકૃષ્ણ સેન્ટર",
+    "સૂર્યકિરણ સેન્ટર",
+    "સુવિધા સેન્ટર",
+    "વ્રજવિલા સેન્ટર",
+    "શુભમ સેન્ટર",
+    "જય યોગેશ્વર સેન્ટર",
+    "જીવનદીપ સેન્ટર",
+    "તક્ષશિલા સેન્ટર",
+    "સમર્પણ બાળ કેન્દ્ર",
+    "વ્રજવિલા બાળ કેન્દ્ર",
+    "નીલકમલ સેન્ટર",
+    "જય સરદાર સેન્ટર",
+    "યમુનાકુંજ સેન્ટર",
+    "પ્રેરણા સેન્ટર",
+    "મહાવીર સેન્ટર",
+    "સુમન સંગિની સેન્ટર",
+    "વિશ્વનગર સ્થાઈ સેન્ટર",
+    "રચના બાળ કેન્દ્ર",
     "બાલ વિકાસ કેન્દ્ર",
-    "સુંદરબાગ કેન્દ્ર",
-    "સાધના સામુહિક ધ્યાન કેન્દ્ર",
-    "ગુરુનગર કેન્દ્ર",
-    "કેયૂર કેન્દ્ર"
+    "સુંદરબાગ સેન્ટર",
+    "સાધના સામુહિક ધ્યાન સેન્ટર",
+    "ગુરુનગર સેન્ટર",
+    "કેયૂર સેન્ટર"
 ]
 
 export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
     const [firstName, setFirstName] = useState("")
     const [middleName, setMiddleName] = useState("")
+    const [gender, setGender] = useState("")
     const [lastName, setLastName] = useState("")
     const [whatsappNumber, setWhatsappNumber] = useState("")
     const [center, setCenter] = useState("")
@@ -76,6 +77,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
     const [errors, setErrors] = useState({
         firstName: false,
         lastName: false,
+        gender: false,
         whatsappNumber: false,
         center: false,
         age: false,
@@ -103,6 +105,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         const newErrors = {
             firstName: !firstName,
             lastName: !lastName,
+            gender: !gender,
             whatsappNumber: !whatsappNumber,
             center: !center,
             age: !age || isNaN(Number(age)) || Number(age) <= 0,
@@ -160,16 +163,24 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         }
         setLoading(false)
     }
+    const handleGujaratiInput = (value: string) => {
+        return value.replace(/[^a-zA-Z\u0A80-\u0AFF\s]/g, '');
+    };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
+            <ul className="list-disc list-inside text-[12px] text-gray-700">
+                <li>૫ વર્ષ થી ઉપર ના બાળકો માટે રિજીટ્રેશન ફરજીયાત છે.</li>
+                <li>બધી માહિતી ઇંગ્લિશ માં ભરવી ફરજીયાત છે.</li>
+            </ul>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="firstName">અટક *</Label>
                     <Input
                         id="firstName"
                         value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
+                        onChange={(e) => setFirstName(handleGujaratiInput(e.target.value))}
                         placeholder="અટક દાખલ કરો"
                         className={errors.firstName ? "border-red-500" : ""}
                     />
@@ -182,22 +193,22 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                     <Input
                         id="middleName"
                         value={middleName}
-                        onChange={(e) => setMiddleName(e.target.value)}
+                        onChange={(e) => setMiddleName(handleGujaratiInput(e.target.value))}
                         placeholder="પોતાનુ નામ દાખલ કરો (વૈકલ્પિક)"
                     />
                 </div>
 
                 <div className="space-y-2">
                     <Label htmlFor="lastName">
-                        પીતાનુ નામ *</Label>
+                        પિતાનું નામ *</Label>
                     <Input
                         id="lastName"
                         value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        placeholder="પીતાનુ નામ દાખલ કરો"
+                        onChange={(e) =>  setLastName(handleGujaratiInput(e.target.value))}
+                        placeholder="પિતાનું નામ દાખલ કરો"
                         className={errors.lastName ? "border-red-500" : ""}
                     />
-                    {errors.lastName && <p className="text-red-500 text-sm">પીતાનુ નામ ભરવું જરૂરી છે</p>}
+                    {errors.lastName && <p className="text-red-500 text-sm">પિતાનું નામ ભરવું જરૂરી છે</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -215,7 +226,8 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="center">કેન્દ્ર *</Label>
+                    <Label htmlFor="center">
+                        સેન્ટર *</Label>
                     <Select value={center} onValueChange={setCenter}>
                         <SelectTrigger className={errors.center ? "border-red-500" : ""}>
                             <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
@@ -226,39 +238,47 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                             ))}
                         </SelectContent>
                     </Select>
-                    {errors.center && <p className="text-red-500 text-sm">કેન્દ્ર પસંદ કરવું જરૂરી છે</p>}
+                    {errors.center && <p className="text-red-500 text-sm">સેન્ટર પસંદ કરવું જરૂરી છે</p>}
                 </div>
 
                 <div className="space-y-2">
                     <Label htmlFor="age">ઉંમર *</Label>
-                    <Input
-                        id="age"
-                        value={age}
-                        onChange={(e) => setAge(e.target.value)}
-                        placeholder="ઉંમર દાખલ કરો"
-                        className={errors.age ? "border-red-500" : ""}
-                        type="number"
-                        min="1"
-                        max="120"
-                    />
+                    <Select value={age} onValueChange={setAge}>
+                        <SelectTrigger className={errors.age ? "border-red-500" : ""}>
+                            <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {Array.from({ length: 100 }, (_, i) => i + 1).map((item) => (
+                                <SelectItem key={item} value={item.toString()}>
+                                    {item}
+                                </SelectItem>
+
+                            ))}
+
+                        </SelectContent>
+                    </Select>
                     {errors.age && <p className="text-red-500 text-sm">માન્ય ઉંમર ભરવી જરૂરી છે</p>}
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="teachersFeeTaken">ગુરુદીક્ષા લીધી છે? *</Label>
-                    <Select value={teachersFeeTaken} onValueChange={setTeachersFeeTaken}>
-                        <SelectTrigger className={errors.teachersFeeTaken ? "border-red-500" : ""}>
+                    <Label htmlFor="gender">લિંગ *</Label>
+                    <Select value={gender} onValueChange={setGender}>
+                        <SelectTrigger className={errors.gender ? "border-red-500" : ""}>
                             <SelectValue placeholder="વિકલ્પ પસંદ કરો" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="Yes">હા</SelectItem>
-                            <SelectItem value="No">ના</SelectItem>
+                            <SelectItem value="Male">પુરુષ</SelectItem>
+                            <SelectItem value="Female">સ્ત્રી</SelectItem>
+                            <SelectItem value="Other">અન્ય</SelectItem>
                         </SelectContent>
                     </Select>
-                    {errors.teachersFeeTaken && <p className="text-red-500 text-sm">કૃપા કરીને એક વિકલ્પ પસંદ કરો</p>}
+                    {errors.gender && (
+                        <p className="text-red-500 text-sm">કૃપા કરીને લિંગ પસંદ કરો</p>
+                    )}
                 </div>
+
 
                 <div className="space-y-2">
                     <Label htmlFor="willTeachersFeeBeTaken">ગુરુદિક્ષા લેવાની છે? *</Label>
