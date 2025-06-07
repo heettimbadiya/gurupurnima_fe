@@ -170,7 +170,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <ul className="list-disc list-inside text-[12px] text-gray-700">
-                <li>૫ વર્ષ થી ઉપર ના બાળકો માટે રિજીટ્રેશન ફરજીયાત છે.</li>
+                <li>૮ વર્ષ થી ઉપર ના બાળકો માટે રિજીટ્રેશન ફરજીયાત છે.</li>
                 <li>બધી માહિતી ઇંગ્લિશ માં ભરવી ફરજીયાત છે.</li>
                 <li>આ ફોર્મ માત્ર વરાછા ઝોન માટે જ છે.</li>
             </ul>
