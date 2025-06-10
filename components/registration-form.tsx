@@ -170,7 +170,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <ul className="list-disc list-inside text-[12px] text-gray-700">
-                <li>૫ વર્ષ થી ઉપર ના બાળકો માટે રિજીટ્રેશન ફરજીયાત છે.</li>
+                <li>૮ વર્ષ થી ઉપર ના બાળકો માટે રિજીટ્રેશન ફરજીયાત છે.</li>
                 <li>બધી માહિતી ઇંગ્લિશ માં ભરવી ફરજીયાત છે.</li>
                 <li>આ ફોર્મ માત્ર વરાછા ઝોન માટે જ છે.</li>
             </ul>
@@ -329,21 +329,38 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                             </div>
                         )}
 
-                        <div className="flex items-center justify-center">
-                            <label htmlFor="photo-upload" className="cursor-pointer">
-                                <div className="flex items-center justify-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-100">
-                                    <Upload className="h-4 w-4" />
-                                    <span>{photo ? "ફોટો બદલો" : "ફોટો અપલોડ કરો"}</span>
-                                </div>
-                                <input
-                                    id="photo-upload"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handlePhotoChange}
-                                    className="hidden"
-                                />
-                            </label>
-                        </div>
+                    <div className="flex items-center justify-center gap-4">
+    {/* Upload from device */}
+    <label htmlFor="photo-upload" className="cursor-pointer">
+        <div className="flex items-center justify-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-100">
+            <Upload className="h-4 w-4" />
+            <span>{photo ? "ફોટો બદલો" : "ફોટો અપલોડ કરો"}</span>
+        </div>
+        <input
+            id="photo-upload"
+            type="file"
+            accept="image/*"
+            onChange={handlePhotoChange}
+            className="hidden"
+        />
+    </label>
+
+    {/* Capture using camera */}
+    <label htmlFor="camera-capture" className="cursor-pointer">
+        <div className="flex items-center justify-center gap-2 bg-green-50 text-green-600 px-4 py-2 rounded-md hover:bg-green-100">
+            <Camera className="h-4 w-4" />
+            <span>કેમેરાથી ફોટો લો</span>
+        </div>
+        <input
+            id="camera-capture"
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handlePhotoChange}
+            className="hidden"
+        />
+    </label>
+</div>
                         {errors.photo && <p className="text-red-500 text-sm mt-2">ફોટો જરૂરી છે</p>}
                         <p className="text-xs text-gray-500 mt-2 text-center">
                             ફોટો કાર્ડ પર ગોળ ફ્રેમમાં પ્રદર્શિત થશે
