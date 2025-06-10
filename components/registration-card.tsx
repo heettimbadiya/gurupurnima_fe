@@ -85,7 +85,7 @@ export default function RegistrationCard({ name, regNumber, photo }: Registratio
             className="relative w-full max-w-md bg-white mx-auto"
             style={{ aspectRatio: "9/16" }}
         >
-          <img src="/Instagram story - 2.png" alt="Card Template" className="w-full h-auto" crossOrigin="anonymous" />
+          <img src="/Instagram%20story%20-%202%20(1).png" alt="Card Template" className="w-full h-auto" crossOrigin="anonymous" />
 
           <div className="absolute inset-0">
             <div
