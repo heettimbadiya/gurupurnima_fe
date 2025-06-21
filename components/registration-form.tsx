@@ -369,7 +369,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                 </Card>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={true}>
                 {loading ? "સબમિટ કરી રહ્યું છે..." : "રજિસ્ટ્રેશન કાર્ડ જનરેટ કરો"}
             </Button>
         </form>
